@@ -5,7 +5,7 @@ class TreeNode {
         NodeBT *right;
 
     public:
-    NodeBT(int x) {
+    TreeNode(int x) {
         this->value = x;
         this->left = nullptr;
         this->right = nullptr;
@@ -20,7 +20,7 @@ class BinaryTree {
         root = nullptr;
     }
 
-    bool find(int x, Node *node = root) {
+    bool find(int x, TreeNode *node = root) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -36,7 +36,7 @@ class BinaryTree {
         }
     }
 
-    void insert(int x, Node *node = root) {
+    void insert(int x, TreeNode *node = root) {
         if (node == nullptr){
             node = new TreeNode(x);
         } else if (node->value == x) {
@@ -61,7 +61,7 @@ class SplayTree {
         root = nullptr;
     }
 
-    bool find(int x, Node *node = root) {
+    bool find(int x, TreeNode *node = root) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -77,7 +77,7 @@ class SplayTree {
         }
     }
 
-    void insert(int x, Node *node = root) {
+    void insert(int x, TreeNode *node = root) {
         if (node == nullptr){
             node = new TreeNode(x);
         } else if (node->value == x) {
@@ -94,19 +94,19 @@ class SplayTree {
     }
 };
 
-    void splay(int x, NodeST *node) {
+    void splay(int x, TreeNode *node) {
         return;
     }
 
-    void zig(NodeST *y) {
-        NodeST *x = y->left;
+    void zig(TreeNode *y) {
+        TreeNode *x = y->left;
         y->left = x->right;
         x->right = y;
         std::swap(y, x);
     }
 
-    void zag(NodeST *y) {
-        NodeST *x = y->right;
+    void zag(TreeNode *y) {
+        TreeNode *x = y->right;
         y->right = x->left;
         x->left = y;
         std::swap(y, x);
