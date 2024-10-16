@@ -3,8 +3,7 @@
 #include <chrono>
 #include <filesystem>
 #include "cppcsv.h"
-#include "binary_tree.cpp"
-#include "splay_tree.cpp"
+#include "trees.cpp"
 
 std::vector<int> gen_secuence(int n, int min = 0, int max = INT_MAX) {
     std::vector<int> secuence;
