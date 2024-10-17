@@ -1,10 +1,9 @@
 class TreeNode {
-    private:
-        int value;
-        NodeBT *left;
-        NodeBT *right;
-
     public:
+    int value;
+    TreeNode *left;
+    TreeNode *right;
+
     TreeNode(int x) {
         this->value = x;
         this->left = nullptr;
@@ -13,14 +12,21 @@ class TreeNode {
 };
 
 class BinaryTree {
-    NodeST *root;
+    TreeNode *root;
 
     public:
     BinaryTree() {
         root = nullptr;
     }
-
-    bool find(int x, TreeNode *node = root) {
+    
+    bool find(int x) {
+        return find(x, root);
+    }
+    void insert(int x) {
+        insert(x, root);
+    }
+    private:
+    bool find(int x, TreeNode *node) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -36,7 +42,7 @@ class BinaryTree {
         }
     }
 
-    void insert(int x, TreeNode *node = root) {
+    void insert(int x, TreeNode *node) {
         if (node == nullptr){
             node = new TreeNode(x);
         } else if (node->value == x) {
@@ -60,8 +66,15 @@ class SplayTree {
     SplayTree() {
         root = nullptr;
     }
+    bool find(int x) {
+        return find(x, root);
+    }
+    void insert(int x) {
+        insert(x, root);
+    }
 
-    bool find(int x, TreeNode *node = root) {
+    private:
+    bool find(int x, TreeNode *node) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -77,7 +90,7 @@ class SplayTree {
         }
     }
 
-    void insert(int x, TreeNode *node = root) {
+    void insert(int x, TreeNode *node) {
         if (node == nullptr){
             node = new TreeNode(x);
         } else if (node->value == x) {
@@ -92,7 +105,6 @@ class SplayTree {
             }
         }
     }
-};
 
     void splay(int x, TreeNode *node) {
         return;
