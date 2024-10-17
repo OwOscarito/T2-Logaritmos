@@ -1,10 +1,15 @@
+#include <iostream>
+#include <utility>
+
+typedef unsigned int uint;
+
 class TreeNode {
     public:
-    int value;
+    uint value;
     TreeNode *left;
     TreeNode *right;
 
-    TreeNode(int x) {
+    TreeNode(uint x) {
         this->value = x;
         this->left = nullptr;
         this->right = nullptr;
@@ -19,14 +24,32 @@ class BinaryTree {
         root = nullptr;
     }
     
-    bool find(int x) {
+    bool find(uint x) {
         return find(x, root);
     }
-    void insert(int x) {
-        insert(x, root);
+    void insert(uint x) {
+        if (root == nullptr) {
+            root = new TreeNode(x);
+        } else {
+            insert(x, root);
+        }
+    }
+
+    void print() {
+        print(root);
     }
     private:
-    bool find(int x, TreeNode *node) {
+    void print(TreeNode *node) {
+        if (node->left != nullptr) {
+            print(node->left);
+        } 
+        std::cout << node->value << " ";
+        if (node->right != nullptr) {
+            print(node->right);
+        }
+    }
+
+    bool find(uint x, TreeNode *node) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -40,20 +63,23 @@ class BinaryTree {
                 return find(x, node->right);
             }
         }
+        return false;
     }
 
-    void insert(int x, TreeNode *node) {
-        if (node == nullptr){
-            node = new TreeNode(x);
-        } else if (node->value == x) {
+    void insert(uint x, TreeNode *node) {
+        if (node->value == x) {
             return;
-        } else if (node->value < x) {
+        } else if (node->value > x) {
             if (node->left != nullptr) {
                 insert(x, node->left);
+            } else {
+                node->left = new TreeNode(x);
             }
         } else {
             if (node->right != nullptr) {
                 insert(x, node->right);
+            } else {
+                node->right = new TreeNode(x);
             }
         }
     }
@@ -66,15 +92,28 @@ class SplayTree {
     SplayTree() {
         root = nullptr;
     }
-    bool find(int x) {
+    bool find(uint x) {
         return find(x, root);
     }
-    void insert(int x) {
+    void insert(uint x) {
         insert(x, root);
     }
 
+    void print() {
+        print(root);
+    }
     private:
-    bool find(int x, TreeNode *node) {
+    void print(TreeNode *node) {
+        if (node->left != nullptr) {
+            print(node->left);
+        } 
+        std::cout << node->value << " ";
+        if (node->right != nullptr) {
+            print(node->right);
+        }
+    }
+
+    bool find(uint x, TreeNode *node) {
         if (node == nullptr){
             return false;
         } else if (node->value == x) {
@@ -88,9 +127,10 @@ class SplayTree {
                 return find(x, node->right);
             }
         }
+        return false;
     }
 
-    void insert(int x, TreeNode *node) {
+    void insert(uint x, TreeNode *node) {
         if (node == nullptr){
             node = new TreeNode(x);
         } else if (node->value == x) {
@@ -106,7 +146,8 @@ class SplayTree {
         }
     }
 
-    void splay(int x, TreeNode *node) {
+    void splay(uint x, TreeNode *node) {
+        node->value = x;
         return;
     }
 
