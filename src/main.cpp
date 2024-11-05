@@ -3,9 +3,13 @@
 #include <random>
 #include <chrono>
 #include <filesystem>
+#include <algorithm>
 #include <cstdint>
 #include "cppcsv.h"
 #include "trees.cpp"
+
+
+
 
 typedef unsigned int uint;
 
@@ -69,6 +73,67 @@ void experiment_1(std::vector<uint> n_seq, std::string save_path) {
     }
 }
 
+
+void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
+    CSVFile csv(save_path + "experiment_v1.csv");
+    csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
+
+    int insert_count = 0;
+    int n = 100000;
+    int m = 100 * n;
+
+    std::vector<uint> m_seq;
+    m_seq.reserve(m);
+
+    BinaryTree binary_tree;
+    SplayTree splay_tree;
+
+    for (auto &&insert_it : n_seq) {
+        binary_tree.insert(insert_it);
+        splay_tree.insert(insert_it);
+        insert_count++;
+
+        // Cada 100,000 elementos, ejecutar el bloque de búsqueda
+        if (insert_count == n) {
+            // Preparar m_seq con M/N copias de cada elemento en n_seq
+            for (const auto &val : n_seq) {
+                for (int i = 0; i < m / n; ++i) {
+                    m_seq.push_back(val);
+                }
+            }
+            std::shuffle(m_seq.begin(), m_seq.end(), std::mt19937{std::random_device{}()});
+
+            // Medición de tiempo para BinaryTree
+            auto start_bt = std::chrono::high_resolution_clock::now();
+            for (const auto &find_val : m_seq) {
+                binary_tree.find(find_val);
+            }
+            auto end_bt = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration_bt = end_bt - start_bt;
+
+            // Medición de tiempo para SplayTree
+            auto start_st = std::chrono::high_resolution_clock::now();
+            for (const auto &find_val : m_seq) {
+                splay_tree.find(find_val);
+            }
+            auto end_st = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> duration_st = end_st - start_st;
+
+            // Calcular tiempos promedio y guardar en CSV
+            double avg_time_bt = duration_bt.count() / m;
+            double avg_time_st = duration_st.count() / m;
+            csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
+
+            // Limpiar m_seq y preparar para el siguiente bloque
+            m_seq.clear();
+            n += 100000;
+        }
+    }
+}
+
+
+
+
 void test(std::vector<uint> n_seq){
     CSVFile csv("test.csv");
     csv.write_line("i", "time(s)", "avg time (s)");
@@ -110,6 +175,7 @@ int main(void) {
     std::filesystem::create_directories(save_path);
 
     test(n_seq);
+
 
     /*
     experiment_1(n_seq, save_path);
