@@ -9,15 +9,7 @@ class CSVFile {
         std::string sep;
 
     public:
-        CSVFile() {
-            this->sep = ",";
-        }
-
-        CSVFile(std::string sep) {
-            this->sep = sep;
-        }
-
-        CSVFile(std::string path, std::string sep) {
+        CSVFile(std::string path, std::string sep = ",") {
             this->sep = sep;
             this->open(path);
         }
