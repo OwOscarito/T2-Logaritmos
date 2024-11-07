@@ -8,9 +8,6 @@
 #include "cppcsv.h"
 #include "trees.cpp"
 
-
-
-
 typedef unsigned int uint;
 
 std::vector<uint> gen_secuence(int n, uint min = 0, uint max = UINT_MAX) {
@@ -95,6 +92,7 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
 
         // Cada 100,000 elementos, ejecutar el bloque de búsqueda
         if (insert_count == n) {
+            std::cout << "checkpoint n = " << n << std::endl;
             // Preparar m_seq con M/N copias de cada elemento en n_seq
             for (const auto &val : n_seq) {
                 for (int i = 0; i < m / n; ++i) {
@@ -102,14 +100,14 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
                 }
             }
             std::shuffle(m_seq.begin(), m_seq.end(), std::mt19937{std::random_device{}()});
-
+            
             // Medición de tiempo para BinaryTree
             auto start_bt = std::chrono::high_resolution_clock::now();
             for (const auto &find_val : m_seq) {
                 binary_tree.find(find_val);
             }
             auto end_bt = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> duration_bt = end_bt - start_bt;
+            std::chrono::duration<double, std::milli> duration_bt = end_bt - start_bt;
 
             // Medición de tiempo para SplayTree
             auto start_st = std::chrono::high_resolution_clock::now();
@@ -117,11 +115,13 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
                 splay_tree.find(find_val);
             }
             auto end_st = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double> duration_st = end_st - start_st;
+            std::chrono::duration<double, std::milli> duration_st = end_st - start_st;
 
             // Calcular tiempos promedio y guardar en CSV
             double avg_time_bt = duration_bt.count() / m;
             double avg_time_st = duration_st.count() / m;
+            std::cout << "avg_time_bt = " << avg_time_bt << std::endl;
+            std::cout << "avg_time_st = "<< avg_time_st << std::endl;
             csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
 
             // Limpiar m_seq y preparar para el siguiente bloque
@@ -134,7 +134,7 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
 
 
 
-void test(std::vector<uint> n_seq){
+void test(std::vector<uint> n_seq, int n_len){
     CSVFile csv("test.csv");
     csv.write_line("i", "time(s)", "avg time (s)");
 
@@ -147,7 +147,7 @@ void test(std::vector<uint> n_seq){
 
     BinaryTree binary_tree;
     SplayTree splay_tree;
-
+    int count = 0;
     for(auto &&insert_it: n_seq) {
         binary_tree.insert(insert_it);
         splay_tree.insert(insert_it);
@@ -168,20 +168,20 @@ void test(std::vector<uint> n_seq){
 }
 
 int main(void) {
-    std::vector<uint> n_seq = gen_secuence(10, INT_MIN);
+    int n_len = 1000000;
+    std::vector<uint> n_seq = gen_secuence(n_len, INT_MIN);
     std::cout << "Starting tests" << std::endl << std::endl;
 
     std::string save_path = "results/";
     std::filesystem::create_directories(save_path);
 
-    test(n_seq);
+    /*test(n_seq, 10);*/
 
-
+    experiment_v1(n_seq, save_path);
     /*
-    experiment_1(n_seq, save_path);
-    experiment_2(seq, save_path)
-    experiment_3(seq, save_path)
-    experiment_4(seq, save_path)
+    experiment_2(n_seq, save_path)
+    experiment_3(n_seq, save_path)
+    experiment_4(n_seq, save_path)
     */
 
     std::cout << "End of test" << std::endl;

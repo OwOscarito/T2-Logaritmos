@@ -41,13 +41,15 @@ class BinaryTree {
     }
     private:
     void print(TreeNode *node) {
+        std::cout << "(";
         if (node->left != nullptr) {
             print(node->left);
         } 
-        std::cout << node->value << " ";
+        std::cout << node->value;
         if (node->right != nullptr) {
             print(node->right);
         }
+        std::cout << ")";
     }
 
     bool find(uint x, TreeNode *node) {
@@ -98,6 +100,7 @@ class SplayTree {
     }
     void insert(uint x) {
         insert(x, root);
+        splay(x, root);
     }
 
     void print() {
@@ -105,13 +108,15 @@ class SplayTree {
     }
     private:
     void print(TreeNode *node) {
+        std::cout << "(";
         if (node->left != nullptr) {
             print(node->left);
         } 
-        std::cout << node->value << " ";
+        std::cout << node->value;
         if (node->right != nullptr) {
             print(node->right);
         }
+        std::cout << ")";
     }
 
     bool find(uint x, TreeNode *node) {
@@ -148,8 +153,33 @@ class SplayTree {
     }
 
     void splay(uint x, TreeNode *node) {
-        node->value = x;
+        if (node == nullptr || node->value == x)
         return;
+
+        if (node->value > x and root->left != nullptr) {
+            // zig zig
+            if (node->left->value > x) {
+                splay(x, node->left->left);
+                // right rotate
+                zig_zig(node->left);
+            }
+            // zig zag
+            else if (node->left->value < x and node->left->right != nullptr) {
+                splay(x, node->left->right);
+                zig_zag(node->left);
+            }
+        } else if (node->right != nullptr){
+            if (node->right->value > x) {
+                splay(x, node->right->left);
+                if (node->right->left != nullptr)
+                    zig(node->right);
+            }
+            else if (node->right->value < x) {
+                splay(x, node->right->right);
+                zag(node);
+            }
+            return (node->right != nullptr) ? node : leftRotate(root);
+        }
     }
 
     void zig(TreeNode *y) {
@@ -164,6 +194,34 @@ class SplayTree {
         y->right = x->left;
         x->left = y;
         std::swap(y, x);
+    }
+
+    void zig_zig(TreeNode *z) {
+        zig(z->left);
+        if (z->left != nullptr) {
+            zig(z);
+        }
+    }
+
+    void zig_zag(TreeNode *z) {
+        zag(z->right);
+        if (z->right != nullptr) {
+            zig(z);
+        }
+    }
+
+    void zag_zig(TreeNode *z) {
+        zig(z->left);
+        if (z->left != nullptr) {
+            zag(z);
+        }
+    }
+
+    void zag_zag(TreeNode *z) {
+        zig(z->left);
+        if (z->left != nullptr) {
+            zig(z);
+        }
     }
 };
 
