@@ -76,7 +76,7 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
     csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
 
     int insert_count = 0;
-    int n = 100000;
+    int n = 100;
     int m = 100 * n;
 
     std::vector<uint> m_seq;
@@ -128,42 +128,6 @@ void experiment_v1(std::vector<uint> n_seq, std::string save_path) {
             m_seq.clear();
             n += 100000;
         }
-    }
-}
-
-
-
-
-void test(std::vector<uint> n_seq, int n_len){
-    CSVFile csv("test.csv");
-    csv.write_line("i", "time(s)", "avg time (s)");
-
-    int n = 10;
-    int m = 10;
-    
-    std::vector<uint> m_seq;
-    m_seq.reserve(m);
-    std::copy(n_seq.begin(), n_seq.end(), back_inserter(m_seq)); 
-
-    BinaryTree binary_tree;
-    SplayTree splay_tree;
-    int count = 0;
-    for(auto &&insert_it: n_seq) {
-        binary_tree.insert(insert_it);
-        splay_tree.insert(insert_it);
-        std::cout << "inserted = " << insert_it << std::endl;
-    }
-    std::cout << "binary tree" << std::endl;
-    binary_tree.print();
-    std::cout << "splay tree" << std::endl;
-    splay_tree.print();
-    std::cout << "finding m = " << m << " in n = " << n << std::endl;
-     // reparar m
-
-    // buscar
-    for(auto &&find_it: m_seq) {
-        binary_tree.find(find_it);
-        splay_tree.find(find_it);
     }
 }
 

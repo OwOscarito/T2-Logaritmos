@@ -37,19 +37,23 @@ class BinaryTree {
     }
 
     void print() {
-        print(root);
+        print("", root, false);    
     }
+
     private:
-    void print(TreeNode *node) {
-        std::cout << "(";
-        if (node->left != nullptr) {
-            print(node->left);
-        } 
-        std::cout << node->value;
-        if (node->right != nullptr) {
-            print(node->right);
+    void print(const std::string& prefix, const TreeNode* node, bool isLeft) {
+        if( node != nullptr ) {
+            std::cout << prefix;
+
+            std::cout << (isLeft ? "├──" : "└──" );
+
+            // print the value of the node
+            std::cout << node->value << std::endl;
+
+            // enter the next tree level - left and right branch
+            print(prefix + (isLeft ? "│   " : "    "), node->left, true);
+            print(prefix + (isLeft ? "│   " : "    "), node->right, false);
         }
-        std::cout << ")";
     }
 
     bool find(uint x, TreeNode *node) {
@@ -99,24 +103,32 @@ class SplayTree {
         return find(x, root);
     }
     void insert(uint x) {
-        insert(x, root);
-        splay(x, root);
+        if (root == nullptr) {
+            root = new TreeNode(x);
+        } else {
+            insert(x, root);
+            splay(x, root);
+        }
     }
 
     void print() {
-        print(root);
+        print("", root, false);    
     }
+
     private:
-    void print(TreeNode *node) {
-        std::cout << "(";
-        if (node->left != nullptr) {
-            print(node->left);
-        } 
-        std::cout << node->value;
-        if (node->right != nullptr) {
-            print(node->right);
+    void print(const std::string& prefix, const TreeNode* node, bool isLeft) {
+        if( node != nullptr ) {
+            std::cout << prefix;
+
+            std::cout << (isLeft ? "├──" : "└──" );
+
+            // print the value of the node
+            std::cout << node->value << std::endl;
+
+            // enter the next tree level - left and right branch
+            print(prefix + (isLeft ? "│   " : "    "), node->left, true);
+            print(prefix + (isLeft ? "│   " : "    "), node->right, false);
         }
-        std::cout << ")";
     }
 
     bool find(uint x, TreeNode *node) {
@@ -137,17 +149,19 @@ class SplayTree {
     }
 
     void insert(uint x, TreeNode *node) {
-        if (node == nullptr){
-            node = new TreeNode(x);
-        } else if (node->value == x) {
+        if (node->value == x) {
             return;
-        } else if (node->value < x) {
+        } else if (node->value > x) {
             if (node->left != nullptr) {
                 insert(x, node->left);
+            } else {
+                node->left = new TreeNode(x);
             }
         } else {
             if (node->right != nullptr) {
                 insert(x, node->right);
+            } else {
+                node->right = new TreeNode(x);
             }
         }
     }
