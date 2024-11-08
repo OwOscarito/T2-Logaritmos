@@ -153,8 +153,29 @@ class SplayTree {
     }
 
     void splay(uint x, TreeNode *node) {
-        if (node == nullptr || node->value == x)
-        return;
+        if (node == nullptr || node->value == x) {
+            return;
+        }
+        
+        if (node->value < x) {
+            if (node->left != nullptr) {
+                splay(x, node->left);
+                if (node->left->value < x) {
+                    zig(node);
+                } else {
+                    zig_zag(node);
+                }
+            }
+        } else {
+            if (node->right != nullptr) {
+                splay(x, node->right);
+                if (node->right->value < x) {
+                    zag_zig(node);
+                } else {
+                    zag(node);
+                }
+            }
+        }
 
     }
     // Zig: y(x(A, B), C) → x(A, y(B, C)) (sólo si y es raíz)
