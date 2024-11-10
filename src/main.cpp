@@ -323,7 +323,7 @@ int main(void) {
 
     experiment_1(n_seq, save_path);
     experiment_2(n_seq, save_path);
-    // experiment_3(n_seq, save_path);
+    experiment_3(n_seq, save_path);
     experiment_4(n_seq, save_path);
 
     std::cout << "End of test" << std::endl;
