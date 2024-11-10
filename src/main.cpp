@@ -24,6 +24,19 @@ std::vector<uint> gen_secuence(int n, uint min = 0, uint max = UINT_MAX) {
     return secuence;
 }
 
+int powi(int base, int exp) {
+    int result = 1;
+    for (;;) {
+        if (exp & 1)
+            result *= base;
+        exp >>= 1;
+        if (!exp)
+            break;
+        base *= base;
+    }
+    return result;
+}
+
 const double CONST_C = 1/1.64493;
 
 double prob_fun(int i) {
