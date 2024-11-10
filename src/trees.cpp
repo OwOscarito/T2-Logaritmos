@@ -37,22 +37,28 @@ class BinaryTree {
     }
 
     void print() {
-        print("", root, false);    
+        if (root == nullptr) {
+            std::cout << "■──■" << std::endl;
+        } else {
+            print("    ", root->right, false);
+            std::cout << "■──" << root->value << std::endl;
+            print("    ", root->left, true);
+        }
+        std::cout << std::endl;
     }
 
     private:
     void print(const std::string& prefix, const TreeNode* node, bool isLeft) {
-        if( node != nullptr ) {
+        if (node == nullptr) {
             std::cout << prefix;
-
-            std::cout << (isLeft ? "├──" : "└──" );
-
-            // print the value of the node
-            std::cout << node->value << std::endl;
-
-            // enter the next tree level - left and right branch
-            print(prefix + (isLeft ? "│   " : "    "), node->left, true);
+            std::cout << (isLeft ? "└──" : "┌──" );
+            std::cout << "■" << std::endl;
+        } else{
             print(prefix + (isLeft ? "│   " : "    "), node->right, false);
+            std::cout << prefix;
+            std::cout << (isLeft ? "└──" : "┌──" );
+            std::cout << node->value << std::endl;
+            print(prefix + (isLeft ? "    " : "│   " ), node->left, true);
         }
     }
 
@@ -107,27 +113,33 @@ class SplayTree {
             root = new TreeNode(x);
         } else {
             insert(x, root);
-            splay(x, root);
+            root = splay(x, root);
         }
     }
 
     void print() {
-        print("", root, false);    
+        if (root == nullptr) {
+            std::cout << "■──■" << std::endl;
+        } else {
+            print("    ", root->right, false);
+            std::cout << "■──" << root->value << std::endl;
+            print("    ", root->left, true);
+        }
+        std::cout << std::endl;
     }
 
     private:
     void print(const std::string& prefix, const TreeNode* node, bool isLeft) {
-        if( node != nullptr ) {
+        if (node == nullptr) {
             std::cout << prefix;
-
-            std::cout << (isLeft ? "├──" : "└──" );
-
-            // print the value of the node
-            std::cout << node->value << std::endl;
-
-            // enter the next tree level - left and right branch
-            print(prefix + (isLeft ? "│   " : "    "), node->left, true);
+            std::cout << (isLeft ? "└──" : "┌──" );
+            std::cout << "■" << std::endl;
+        } else{
             print(prefix + (isLeft ? "│   " : "    "), node->right, false);
+            std::cout << prefix;
+            std::cout << (isLeft ? "└──" : "┌──" );
+            std::cout << node->value << std::endl;
+            print(prefix + (isLeft ? "    " : "│   " ), node->left, true);
         }
     }
 
@@ -166,111 +178,75 @@ class SplayTree {
         }
     }
 
-    void splay(uint x, TreeNode *node) {
-        if (node == nullptr || node->value == x) {
-            return;
-        }
-        
-        if (node->value < x) {
-            if (node->left != nullptr) {
-                splay(x, node->left);
-                if (node->left->value < x) {
-                    zig(node);
-                } else {
-                    zig_zag(node);
+    TreeNode* splay(int x, TreeNode* node) {  
+        if (node == nullptr|| node->value == x)  
+            return node;  
+    
+        if (x < node->value) {  
+            if (node->left == nullptr) {
+                return node;
+            }
+            // Zig-Zig (Left Left)  
+            if (x < node->left->value) {
+                node->left->left = splay(x, node->left->left);  
+                node = zig(node);  
+            }  
+            // Zig-Zag (Left Right)  
+            else if (x > node->left->value) { 
+                if (node->left->right != nullptr) {
+                    node->left->right = splay(x, node->left->right);  
+                    node->left = zag(node->left); 
                 }
             }
-        } else {
-            if (node->right != nullptr) {
-                splay(x, node->right);
-                if (node->right->value < x) {
-                    zag_zig(node);
-                } else {
-                    zag(node);
-                }
+            if (node->left == nullptr) { 
+                return node;  
+            } else {
+                return zig(node);
             }
-        }
+        }  
+        else {
+            if (node->right == nullptr)  
+                return node;  
+            // Zag-Zig (Right Left)  
+            if (x > node->right->value) {  
+                node->right->left = splay(x, node->right->left); 
+                if (node->right->left != nullptr) {
+                    node->right = zig(node->right);  
+                }
+            }  
+            // Zag-Zag (Right Right)
+            else if (x < node->right->value) {  
+                node->right->right = splay(x, node->right->right);  
+                node = zag(node);  
+            } 
+            if (node->left == nullptr) { 
+                return node;  
+            } else {
+                return zig(node);
+            }
+        }  
+        return node;
+    }  
 
-    }
     // Zig: y(x(A, B), C) → x(A, y(B, C)) (sólo si y es raíz)
-    void zig(TreeNode *y) {
+    TreeNode* zig(TreeNode *y) {
         TreeNode *x = y->left;
         TreeNode *B = x->right;
 
         y->left = B;
         x->right = y;
         
-        std::swap(y, x);
+        return x;
     }
     // Zag: y(A, x(B, C)) → x(y(A, B), C) (sólo si y es raíz)
-    void zag(TreeNode *y) {
+    TreeNode* zag(TreeNode *y) {
         TreeNode *x = y->right;
         TreeNode *B = x->left;
 
         y->right = B;
         x->left = y;
         
-        std::swap(y, x);
-    }
-    // Zig-zig: z(y(x(A, B), C), D) → x(A, y(B, z(C, D)))
-    void zig_zig(TreeNode *z) {
-        TreeNode *y = z->left;
-        TreeNode *x = y->left;
-
-        TreeNode *B = x->right;
-        TreeNode *C = y->right;
-
-        z->left = C;
-        y->left = B;
-        y->right = z;
-        x->right = y;
-
-        std::swap(z, x);
-    }
-    // Zig-zag: z(y(A, x(B, C)), D) → x(y(A, B), z(C, D))
-    void zig_zag(TreeNode *z) {
-        TreeNode *y = z->left;
-        TreeNode *x = y->right;
-
-        TreeNode *B = x->left;
-        TreeNode *C = x->right;
-
-        x->left = y;
-        x->right = z;
-        y->right = B;
-        z->left = C;
-
-        std::swap(z, x);
-    }
-    // Zag-zig: z(A, y(x(B, C), D)) → x(z(A, B), y(C, D))
-    void zag_zig(TreeNode *z) {
-        TreeNode *y = z->right;
-        TreeNode *x = y->left;
-
-        TreeNode *B = x->left;
-        TreeNode *C = x->right;
-
-        x->left = z;
-        x->right = y;
-        y->left = C;
-        z->right = B;
-
-        std::swap(z, x);
-    }
-    // Zag-zag: z(A, y(B, x(C, D))) → x(y(z(A, B), C), D)
-    void zag_zag(TreeNode *z) {
-        TreeNode *y = z->right;
-        TreeNode *x = y->left;
-
-        TreeNode *B = y->left;
-        TreeNode *C = x->left;
-
-        x->left = y;
-        y->left = z;
-        y->right = C;
-        z->right = B;
-
-        std::swap(z, x);
+        return x;
     }
 };
 
