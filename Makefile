@@ -1,9 +1,14 @@
+DEBUG ?= 0
+ifeq ($(DEBUG), 1)
+    CPPFLAGS = -g -Og -DDEBUG
+else
+    CPPFLAGS = -O3 -Wall -Wextra -pthread -std=c++17 -DNDEBUG
+endif
+
 CXX = g++
 
 BIN := main.exe
 SRC := src/main.cpp
-
-CPPFLAGS := -O3 -Wall -Wextra -pthread -std=c++17
 
 .PHONY: build run clean
 
