@@ -47,7 +47,7 @@ void experiment_1(std::vector<uint> n_seq, std::string save_path) {
     std::cout << "Experiment 1" << std::endl;
 
     CSVFile csv(save_path + "experiment_1.csv");
-    csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
+    csv.write_line("i", "BT time(ns)", "BT avg time (ns)", "ST time(ns)", "ST avg time (ns)");
 
     int insert_count = 0;
     int n = 100000;
@@ -81,7 +81,7 @@ void experiment_1(std::vector<uint> n_seq, std::string save_path) {
                 binary_tree.find(find_val);
             }
             auto end_bt = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_bt = end_bt - start_bt;
+            auto duration_bt = std::chrono::duration_cast<std::chrono::nanoseconds>( end_bt - start_bt);
 
             // Medición de tiempo para SplayTree
             auto start_st = std::chrono::high_resolution_clock::now();
@@ -89,11 +89,11 @@ void experiment_1(std::vector<uint> n_seq, std::string save_path) {
                 splay_tree.find(find_val);
             }
             auto end_st = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_st = end_st - start_st;
+            auto duration_st = std::chrono::duration_cast<std::chrono::nanoseconds>( end_st - start_st);
 
             // Calcular tiempos promedio y guardar en CSV
-            double avg_time_bt = duration_bt.count() / m;
-            double avg_time_st = duration_st.count() / m;
+            double avg_time_bt = duration_bt.count() / (double)m;
+            double avg_time_st = duration_st.count() / (double)m;
             std::cout << "avg_time_bt = " << avg_time_bt << std::endl;
             std::cout << "avg_time_st = "<< avg_time_st << std::endl << std::endl;
             csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
@@ -110,7 +110,7 @@ void experiment_2(std::vector<uint> n_seq, std::string save_path) {
     std::cout << "Experiment 2" << std::endl;
 
     CSVFile csv(save_path + "experiment_2.csv");
-    csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
+     csv.write_line("i", "BT time(ns)", "BT avg time (ns)", "ST time(ns)", "ST avg time (ns)");
 
     BinaryTree binary_tree;
     SplayTree splay_tree;
@@ -145,7 +145,7 @@ void experiment_2(std::vector<uint> n_seq, std::string save_path) {
                 binary_tree.find(find_it);
             }
             auto end_bt = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_bt = end_bt - start_bt;
+            auto duration_bt = std::chrono::duration_cast<std::chrono::nanoseconds>( end_bt - start_bt);
 
             // Medición de tiempo para SplayTree
             auto start_st = std::chrono::high_resolution_clock::now();
@@ -153,11 +153,11 @@ void experiment_2(std::vector<uint> n_seq, std::string save_path) {
                 splay_tree.find(find_it);
             }
             auto end_st = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_st = end_st - start_st;
+            auto duration_st = std::chrono::duration_cast<std::chrono::nanoseconds>(end_st - start_st);
 
             // Calcular tiempos promedio y guardar en CSV
-            double avg_time_bt = duration_bt.count() / m;
-            double avg_time_st = duration_st.count() / m;
+            double avg_time_bt = duration_bt.count() / (double)m;
+            double avg_time_st = duration_st.count() / (double)m;
             std::cout << "avg_time_bt = " << avg_time_bt << std::endl;
             std::cout << "avg_time_st = "<< avg_time_st << std::endl << std::endl;
             csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
@@ -174,7 +174,7 @@ void experiment_3(std::vector<uint> n_seq, std::string save_path) {
     std::cout << "Experiment 3" << std::endl;
 
     CSVFile csv(save_path + "experiment_3.csv");
-    csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
+     csv.write_line("i", "BT time(ns)", "BT avg time (ns)", "ST time(ns)", "ST avg time (ns)");
 
     // Ordenar el arreglo A
     std::sort(n_seq.begin(), n_seq.end());
@@ -211,7 +211,7 @@ void experiment_3(std::vector<uint> n_seq, std::string save_path) {
                 binary_tree.find(find_val);
             }
             auto end_bt = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_bt = end_bt - start_bt;
+            auto duration_bt = std::chrono::duration_cast<std::chrono::nanoseconds>( end_bt - start_bt);
 
             // Medición de tiempo para SplayTree
             auto start_st = std::chrono::high_resolution_clock::now();
@@ -219,11 +219,11 @@ void experiment_3(std::vector<uint> n_seq, std::string save_path) {
                 splay_tree.find(find_val);
             }
             auto end_st = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_st = end_st - start_st;
+            auto duration_st = std::chrono::duration_cast<std::chrono::nanoseconds>( end_st - start_st);
 
             // Calcular tiempos promedio y guardar en CSV
-            double avg_time_bt = duration_bt.count() / m;
-            double avg_time_st = duration_st.count() / m;
+            double avg_time_bt = duration_bt.count() / (double)m;
+            double avg_time_st = duration_st.count() / (double)m;
             std::cout << "avg_time_bt = " << avg_time_bt << std::endl;
             std::cout << "avg_time_st = "<< avg_time_st << std::endl << std::endl;
             csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
@@ -239,7 +239,7 @@ void experiment_4(std::vector<uint> n_seq, std::string save_path) {
     std::cout << "Experiment 4" << std::endl;
 
     CSVFile csv(save_path + "experiment_4.csv");
-    csv.write_line("i", "BT time(s)", "BT avg time (s)", "ST time(s)", "ST avg time (s)");
+     csv.write_line("i", "BT time(ns)", "BT avg time (ns)", "ST time(ns)", "ST avg time (ns)");
 
 
     int insert_count = 0;
@@ -277,7 +277,7 @@ void experiment_4(std::vector<uint> n_seq, std::string save_path) {
                 binary_tree.find(find_it);
             }
             auto end_bt = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_bt = end_bt - start_bt;
+            auto duration_bt = std::chrono::duration_cast<std::chrono::nanoseconds>( end_bt - start_bt);
 
             // Medición de tiempo para SplayTree
             auto start_st = std::chrono::high_resolution_clock::now();
@@ -285,11 +285,11 @@ void experiment_4(std::vector<uint> n_seq, std::string save_path) {
                 splay_tree.find(find_it);
             }
             auto end_st = std::chrono::high_resolution_clock::now();
-            std::chrono::duration<double, std::milli> duration_st = end_st - start_st;
+            auto duration_st = std::chrono::duration_cast<std::chrono::nanoseconds>( end_st - start_st);
 
             // Calcular tiempos promedio y guardar en CSV
-            double avg_time_bt = duration_bt.count() / m;
-            double avg_time_st = duration_st.count() / m;
+            double avg_time_bt = duration_bt.count() / (double)m;
+            double avg_time_st = duration_st.count() / (double)m;
             std::cout << "avg_time_bt = " << avg_time_bt << std::endl;
             std::cout << "avg_time_st = "<< avg_time_st << std::endl << std::endl;
             csv.write_line(insert_count, duration_bt.count(), avg_time_bt, duration_st.count(), avg_time_st);
@@ -323,7 +323,7 @@ int main(void) {
 
     experiment_1(n_seq, save_path);
     experiment_2(n_seq, save_path);
-    experiment_3(n_seq, save_path);
+    // experiment_3(n_seq, save_path);
     experiment_4(n_seq, save_path);
 
     std::cout << "End of test" << std::endl;
