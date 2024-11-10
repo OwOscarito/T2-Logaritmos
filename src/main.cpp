@@ -198,7 +198,7 @@ void experiment_3(std::vector<uint> n_seq, std::string save_path) {
             std::cout << "checkpoint n = " << n << std::endl;
             // Preparar m_seq con M/N copias de cada elemento en n_seq
             m_seq.reserve(m);
-            for (const auto &val : n_seq) {
+            for (auto &val : n_seq) {
                 for (int i = 0; i < m / n; ++i) {
                     m_seq.push_back(val);
                 }
@@ -264,7 +264,7 @@ void experiment_4(std::vector<uint> n_seq, std::string save_path) {
             std::copy(n_seq.begin(), n_seq.begin() + n, std::back_inserter(C));
             m_seq.reserve(m);
             // Crear el arreglo M
-            for (int i = 0; i < 1000000; ++i) {
+            for (int i = 0; i < n; ++i) {
                 int copies = prob_fun(i) * m;
                 for (int j = 0; j < copies; ++j) {
                     m_seq.push_back(n_seq[i]);
