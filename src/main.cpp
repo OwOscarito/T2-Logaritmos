@@ -313,7 +313,7 @@ void test(void) {
     st.print();
 }
 
-int main(int argc, char const *argv[]) {
+int main(void) {
     int n_len = 1000000;
     std::vector<uint> n_seq = gen_secuence(n_len, INT_MIN);
     std::cout << "Starting tests" << std::endl << std::endl;

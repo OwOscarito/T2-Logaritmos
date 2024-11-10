@@ -178,7 +178,7 @@ class SplayTree {
         }
     }
 
-    TreeNode* splay(int x, TreeNode* node) {  
+    TreeNode* splay(uint x, TreeNode* node) {  
         if (node == nullptr|| node->value == x)  
             return node;  
     
